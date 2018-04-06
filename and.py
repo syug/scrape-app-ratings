@@ -23,5 +23,5 @@ def getRate(url):
 if __name__ == "__main__":
   for arg in sys.argv:
     if arg != __file__:
-      print(arg)
+      print('URL: ' + arg)
       print(getRate(arg))
