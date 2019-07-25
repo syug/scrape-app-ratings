@@ -3,16 +3,22 @@
 import urllib2
 import sys
 import re
+import json
 from bs4 import BeautifulSoup
 import emoji
 
-def getRate(url):
+def getRatingValue(url):
   html = urllib2.urlopen(url)
   soup = BeautifulSoup(html, 'lxml')
   
-  rateRaw = soup.find(attrs={"itemprop": "ratingValue"})['content']
-  rate = str(round(float(rateRaw), 1))
-  rateNum = int(round(float(rateRaw)))
+  jsonldString = soup.find(name="script", attrs={"type": "application/ld+json"})
+  jsonld = json.loads(jsonldString.get_text())
+  rateRaw = jsonld['aggregateRating']['ratingValue']
+  return float(rateRaw)
+
+def getResultMessage(ratingValue):
+  rate = str(round(float(ratingValue), 1))
+  rateNum = int(round(float(ratingValue)))
   stars = []
   for i in range(rateNum):
     stars.append(':star:')
@@ -24,4 +30,6 @@ if __name__ == "__main__":
   for arg in sys.argv:
     if arg != __file__:
       print('URL: ' + arg)
-      print(getRate(arg))
+      ratingValue = getRatingValue(arg)
+      message = getResultMessage(ratingValue=ratingValue)
+      print(message)
