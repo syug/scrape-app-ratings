@@ -10,7 +10,7 @@ import emoji
 def getRatingValue(url):
   html = urllib2.urlopen(url)
   soup = BeautifulSoup(html, 'lxml')
-  jsonldString = soup.find(name="script", attrs={"type": "application/ld+json"})
+  jsonldString = soup.find(name='script', attrs={'type': 'application/ld+json'})
 
   if jsonldString == None:
     return -1
