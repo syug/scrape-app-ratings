@@ -1,15 +1,15 @@
 #!/usr/local/bin/python2.7
 # coding: utf-8
-import urllib2
 import sys
 import re
 import json
+import requests
 from bs4 import BeautifulSoup
 import emoji
 
 def getRatingValue(url):
-  html = urllib2.urlopen(url)
-  soup = BeautifulSoup(html, 'lxml')
+  responce = requests.get(url)
+  soup = BeautifulSoup(responce.text, 'lxml')
   jsonldString = soup.find(name='script', attrs={'type': 'application/ld+json'})
 
   if jsonldString == None:
